@@ -42,7 +42,7 @@ async def edit_or_reply(msg: Message, **kwargs):
 )
 async def executor(client: app, message: Message):
     if len(message.command) < 2:
-        return await edit_or_reply(message, text="<b>ᴡhat you wanna execute NIGGA . . ?</b>")
+        return await edit_or_reply(message, text="<b>What do you want to execute?</b>")
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
@@ -154,46 +154,27 @@ async def shellrunner(_, message: Message):
     if len(message.command) < 2:
         return await edit_or_reply(message, text="<b>ᴇxᴀᴍᴩʟᴇ :</b>\n/sh git pull")
     text = message.text.split(None, 1)[1]
-    if "\n" in text:
-        code = text.split("\n")
-        output = ""
-        for x in code:
-            shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", x)
-            try:
-                process = subprocess.Popen(
-                    shell,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-            except Exception as err:
-                await edit_or_reply(message, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
-            output += f"<b>{code}</b>\n"
-            output += process.stdout.read()[:-1].decode("utf-8")
-            output += "\n"
-    else:
-        shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", text)
-        for a in range(len(shell)):
-            shell[a] = shell[a].replace('"', "")
+    lines = text.split("\n")
+    output = ""
+    for line in lines:
+        if not line:
+            continue
+        shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", line)
         try:
             process = subprocess.Popen(
                 shell,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
+            stdout, stderr = process.communicate()
+            output += f"<b>$ {line}</b>\n"
+            if stdout:
+                output += f"<code>{stdout.decode('utf-8')}</code>\n"
+            if stderr:
+                output += f"<code>{stderr.decode('utf-8')}</code>\n"
         except Exception as err:
-            print(err)
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            errors = traceback.format_exception(
-                etype=exc_type,
-                value=exc_obj,
-                tb=exc_tb,
-            )
-            return await edit_or_reply(
-                message, text=f"<b>ERROR :</b>\n<pre>{''.join(errors)}</pre>"
-            )
-        output = process.stdout.read()[:-1].decode("utf-8")
-    if str(output) == "\n":
-        output = None
+            output += f"<b>$ {line}</b>\n<code>{err}</code>\n"
+
     if output:
         if len(output) > 4096:
             with open("output.txt", "w+") as file:
@@ -201,10 +182,9 @@ async def shellrunner(_, message: Message):
             await app.send_document(
                 message.chat.id,
                 "output.txt",
-                reply_to_message_id=message.id,
-                caption="<code>Output</code>",
+                caption="<b>Output</b>",
             )
-            return os.remove("output.txt")
+            os.remove("output.txt")
         await edit_or_reply(message, text=f"<b>OUTPUT :</b>\n<pre>{output}</pre>")
     else:
         await edit_or_reply(message, text="<b>OUTPUT :</b>\n<code>None</code>")
