@@ -14,7 +14,7 @@ pillow
 psutil
 py-tgcalls==2.2.8
 pytgcrypto
-pyrogram
+kurigram
 python-dotenv
 pyyaml
 requests
