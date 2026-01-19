@@ -201,10 +201,10 @@ This project is licensed under the MIT License. For more details, see the [LICEN
 ### 🙏 Acknowledgements
 
 Thanks to all the contributors, supporters, and users of the Aviax Music Bot. Your feedback and support keep us going!
-- Yukki Music & AnonX Music – Base inspiration
+- AnonX Music – Base inspiration
+- The original developers of AnonX Music for their foundational work.
 - All contributors & community members
   
 ---
 
 ⭐ If you like this project, don’t forget to star the repo!
-
