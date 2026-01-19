@@ -17,9 +17,7 @@ async def privacy(client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(
-                    "View Privacy Policy", url=config.SUPPORT_GROUP
-                )
+                InlineKeyboardButton("View Privacy Policy", url=config.PRIVACY_LINK)
             ]
         ]
     )
