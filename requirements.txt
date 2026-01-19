@@ -14,7 +14,7 @@ pillow
 psutil
 py-tgcalls==2.2.8
 pytgcrypto
-kurigram
+pyrogram
 python-dotenv
 pyyaml
 requests
@@ -26,4 +26,3 @@ yt-dlp
 youtube-search
 youtube-search-python
 py-yt-search
-
